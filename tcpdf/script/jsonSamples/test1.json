@@ -1,0 +1,23 @@
+{
+  "pdfdata" : [
+    {
+      "customerdata" :
+        {
+          "name" : "Worth Interiors",
+          "company" : "Brooke Smith",
+          "address1" : "8 Via Mizner Worth Avenue",
+          "address2" : "Palm Beach, FL 33480"
+        },
+      "invoicedata" :
+        {
+          "number" : "15359",
+          "for" : "Your rug stuff",
+          "date" : "July 07, 2022",
+          "amountdue" : "$19,800.00"
+        },
+      "items" : [
+
+      ]
+    }
+  ]
+}

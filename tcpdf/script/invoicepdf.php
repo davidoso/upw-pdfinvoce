@@ -14,7 +14,12 @@ require_once('../tcpdf_multirow.php');
 // $json = array("filepath" => "jsonSamples/test1.json");
 $config = array(
 	"jsonfilepath" => "jsonSamples/test1.json",
-	"headerLogo" => "logo.jpg");
+	"headerLogo" => "logo.jpg",
+	"invoiceRowColorRGB" => array(233, 236, 239),
+	"itemRowOddColorHEX" => "#fff",
+	"itemRowEvenColorHEX" => "#E9ECEF",
+	"rowOddColor" => "logo.jpg"
+);
 parseJSONPDF($config);
 
 
@@ -74,7 +79,10 @@ function parseJSONPDF($config/*, $json*/) {
 		$titleFontSize = isset($config['titleFontSize']) ? $config['titleFontSize'] : 20;
 		$bodyFontStyle = isset($config['bodyFontStyle']) ? $config['bodyFontStyle'] : '';
 		$bodyFontSize = isset($config['bodyFontSize']) ? $config['bodyFontSize'] : 10;
-		$headerLogo = isset($config['headerLogo']) ? $config['headerLogo'] : 'sf_logo.png';
+		$headerLogo = $config['headerLogo'];
+		$invoiceRowColorRGB = $config['invoiceRowColorRGB'];
+		$itemRowOddColorHEX = $config['itemRowOddColorHEX'];
+		$itemRowEvenColorHEX = $config['itemRowEvenColorHEX'];
 
 		// Fixed constants (non parameters)
 		// Switch on printField() only works with these types, unless the object contains a "value" key also
@@ -173,7 +181,7 @@ function parseJSONPDF($config/*, $json*/) {
 		$pdf->SetLineStyle( array( 'width' => 0.5, 'color' => array(80, 80, 80)));
 		foreach($data->invoicedata as $item) {
 			$pdf->SetXY($x_start, $y_index);
-			$pdf->SetFillColor(233, 236, 239);
+			$pdf->SetFillColor($invoiceRowColorRGB[0], $invoiceRowColorRGB[1], $invoiceRowColorRGB[2]);
 			$pdf->setCellPaddings(2, 2, 2, 2);
 			$pdf->MultiCell(25, 5, $item->label, 'B', 'L', 1, 0);
 			$pdf->setCellPaddings(2, 2, 8, 0);
@@ -187,7 +195,7 @@ function parseJSONPDF($config/*, $json*/) {
 		}
 
 
-		$tbl = getTable($data->items);
+		$tbl = getTable($data->items, $itemRowEvenColorHEX, $itemRowOddColorHEX);
 
         // $pdf->SetX(2 + PDF_MARGIN_RIGHT);
 		//
@@ -208,83 +216,110 @@ function parseJSONPDF($config/*, $json*/) {
 
 
 		$pdf->writeHTML($tbl, true, false, false, false, '');
-		
-// // set some text for example
-// $txt = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed imperdiet lectus. Phasellus quis velit velit, non condimentum quam. Sed neque urna, ultrices ac volutpat vel, laoreet vitae augue. Sed vel velit erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras eget velit nulla, eu sagittis elit. Nunc ac arcu est, in lobortis tellus. Praesent condimentum rhoncus sodales. In hac habitasse platea dictumst. Proin porta eros pharetra enim tincidunt dignissim nec vel dolor. Cras sapien elit, ornare ac dignissim eu, ultricies ac eros. Maecenas augue magna, ultrices a congue in, mollis eu nulla. Nunc venenatis massa at est eleifend faucibus. Vivamus sed risus lectus, nec interdum nunc.
-
-// Fusce et felis vitae diam lobortis sollicitudin. Aenean tincidunt accumsan nisi, id vehicula quam laoreet elementum. Phasellus egestas interdum erat, et viverra ipsum ultricies ac. Praesent sagittis augue at augue volutpat eleifend. Cras nec orci neque. Mauris bibendum posuere blandit. Donec feugiat mollis dui sit amet pellentesque. Sed a enim justo. Donec tincidunt, nisl eget elementum aliquam, odio ipsum ultrices quam, eu porttitor ligula urna at lorem. Donec varius, eros et convallis laoreet, ligula tellus consequat felis, ut ornare metus tellus sodales velit. Duis sed diam ante. Ut rutrum malesuada massa, vitae consectetur ipsum rhoncus sed. Suspendisse potenti. Pellentesque a congue massa.';
-
-		// Set border style
-		// $pdf->SetLineStyle(array('width' => $borderWidth, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => $borderColor));
-
-		// // Add view-only fields from JSON data. Each "page" contains "elements". Each element contains fields
-		// foreach($data->pages as $p)
-		// 	foreach($p->elements as $e)
-		// 		printField($e, $pdf, $knownTypes, $imageTypes, $ignoreTypes, $titleWidth, $titleColor, $subheaderColor, $imageWidth, $imageHeight, $font, $bodyFontStyle, $bodyFontSize);
-
-		// // Add bottom border below the last cell. MultiCell() do have this border but Image() don't
-		// $pdf->Cell(0, 0.5, '', 'T', false, 'C', 0, '', 0, false, 'T', 'M');
 
 		// Close and output PDF document
 		$pdf->Output($outputName, $outputMode);
+		// echo $tbl;
 	}
 }
 
-function getTable($data) {
-	$tbl = '<table cellpadding="2" style="font-size: 10px; margin-top: 10px;"> ' .
-	'<thead style="margin-top: 10px;"> ' .
-	' <tr style="color: #fff; background-color: #212529; border-color: #32383e; font-weight: bold;"> ' .
-	'  <td width="100" style="border: 1px solid red;" align="center"><b>Image</b></td> ' .
-	'  <td width="100" align="center"><b>Item</b></td> ' .
-	'  <td width="160" align="center"><b>Description</b></td> ' .
-	'  <td width="80" align="center"> <b>Unit cost</b></td> ' .
-	'  <td width="40" align="center"><b>Qty</b></td> ' .
-	'  <td width="80" align="center"><b>Discount</b></td> ' .
-	'  <td width="80" align="center"><b>Tax</b></td> ' .
-	'  <td width="80" align="center"><b>Price</b></td> ' .
-	' </tr> ' .
-	'</thead> ' .
-	'<tbody> ' .
-	' <tr style="color:black;"> ' .
-	'<td width="100" height="100" style="text-align: center; background-color:red; "><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="" width="80" /> </td> ' .
-	'    <td width="100" style="text-align: left; background-color:red;">Rug 123937</td> ' .
-	'    <td width="160" align="left">A table in HTML consists of table cells inside rows and columns<br>A table in HTML consists of table cells inside rows and columns</td> ' .
-	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-	'<td width="40" align="center">1</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="right">5900</td> ' .
-	' </tr> ' .
-	' <tr style="color:black;"> ' .
-	'<td width="100" height="100" style="text-align: center; background-color:red; "><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="" width="80" /> </td> ' .
-	'    <td width="100" style="text-align: left; background-color:red;">Rug 22</td> ' .
-	'    <td width="160" align="left">A table in HTML consists of table cells insidA table in HTML consists of table cells inside rows and columns</td> ' .
-	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-	'<td width="40" align="center">1</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="right">5900</td> ' .
-	' </tr> ' .
-	' <tr style="color:black;"> ' .
-	'<td width="100" height="100" align="center"></td> ' .
-	'    <td width="100" style="text-align: left; background-color:red;">Rug 3333</td> ' .
-	'    <td width="160" align="left">A table in HTML consists of table cells inside rows and columns<br>A table in HTML consists of table cells inside rows and columns</td> ' .
-	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-	'<td width="40" align="center">1</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="right">5900</td> ' .
-	' </tr> ' .
-	' <tr style="color:black;"> ' .
-	'<td width="100" height="100" align="center"></td> ' .
-	'    <td width="100" style="text-align: left; background-color:red;">Rug 4444 no image</td> ' .
-	'    <td width="160" align="left">A table in HTML cos<br> no image</td> ' .
-	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-	'<td width="40" align="center">1</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="center">-</td> ' .
-	'<td width="80" align="right">5900</td> ' .
-	' </tr> ' .
+function formatCurrency($val, $zeroValue) {
+	if($val == $zeroValue)
+		return $zeroValue;
+	if(intval($val) == 0)
+		return $zeroValue;
+	else
+		return '$' . number_format($val, 2);
+}
+
+function getTable($items, $itemRowEvenColorHEX, $itemRowOddColorHEX) {
+	$datatotal = $items->total;
+	$datalist = $items->list;
+
+	$tbl =
+	'<table cellpadding="5">' .
+	'<thead>' .
+		'<tr  style="color: #fff; background-color: #212529; font-weight: bold; font-size: 12px;">' .
+	'<td width="100" align="center" style="border-left: 1px solid #212529; border-top: 1px solid #212529;">	<b>Image</b></td>' .
+	'<td width="100"   align="center" style="border-top: 1px solid #212529;">	<b>Item</b></td>' .
+	'<td width="160"   align="center" style="border-top: 1px solid #212529;">	<b>Description</b></td>' .
+	'<td width="80"   align="center" style="border-top: 1px solid #212529;">		<b>Unit cost</b></td>' .
+	'<td width="40"   align="center" style="border-top: 1px solid #212529;">		<b>Qty</b></td>' .
+	'<td width="80"   align="center" style="border-top: 1px solid #212529;">		<b>Discount</b></td>' .
+	'<td width="80"   align="center" style="border-top: 1px solid #212529;">		<b>Tax</b></td>' .
+	'<td width="80"   align="right" style="border-right: 1px solid #212529; border-top: 1px solid #212529;">		<b>Price</b></td>' .
+		'</tr>' .
+	'</thead>' .
+	'<tbody style="font-size: 10px;">';
+
+	$rowIndex = 0;
+	foreach($datalist as $item) {
+		$rowBg =  (++$rowIndex % 2 == 0)
+			? 'vertical-align:bottom; border: 1px solid #505050; background-color: ' . $itemRowEvenColorHEX . ';'
+			: 'vertical-align:bottom; border: 1px solid #505050; background-color: ' . $itemRowOddColorHEX . ';';
+
+		$imageurl = isset($item->imageurl) ? $item->imageurl : '';
+		$rugid = isset($item->rugid) ? $item->rugid : '-';
+		$description = isset($item->description) ? $item->description : '-';
+		$qty = isset($item->qty) ? $item->qty : '0';
+		$unitcost = isset($item->unitcost) ? $item->unitcost : '$0.00';
+		$discount = isset($item->discount) ? $item->discount : '-';
+		$tax = isset($item->tax) ? $item->tax : '$0.00';
+		$price = isset($item->price) ? $item->price : '$0.00';
+
+		$unitcost = formatCurrency($unitcost, '$0.00');
+		$discount = formatCurrency($discount, '-');
+		$tax = formatCurrency($tax, '$0.00');
+		$price = formatCurrency($price, '$0.00');
+
+		// DAVID PENDIENTE: imageurl null
+		$tbl = $tbl . '<tr  style="color: black;">' .
+			'<td width="100" height="80" style="text-align: center; ' . $rowBg . '">' .
+				'<img src="' . $imageurl . '" alt="" width="80"/></td>' .
+			'<td width="100" style="padding: 15px; text-align: left; ' . $rowBg . '">'  . $rugid . '</td>' .
+			'<td width="160" style="text-align: left; ' . $rowBg . '">'  . $description . '</td>' .
+			'<td width="80" style="text-align: center; ' . $rowBg . '">'  . $unitcost . '</td>' .
+			'<td width="40" style="text-align: center; ' . $rowBg . '">'  . $qty . '</td>' .
+			// '<td width="80" style="text-align: ' .
+			// 	($discount == '-' ? 'center' : 'right') . $rowBg . '">'  . $discount . '</td>' .
+			'<td width="80" style="text-align: center; ' . $rowBg . '">'  . $discount . '</td>' .
+			'<td width="80" style="text-align: center; ' . $rowBg . '">'  . $tax . '</td>' .
+			'<td width="80" style="text-align: right; ' . $rowBg . '">'  . $price . '</td>' .
+		'</tr> ';
+	}
+
+	$totalStyle = 'text-align: right; border: 1px solid #505050;';
+	$balanceStyle = 'text-align: right; border: 1px solid #505050; color: #fff; background-color: #212529;';
+
+	// Add totals
+	foreach($datatotal as $k => $v) {
+		if($k != 'balance') {
+			$tbl = $tbl . '<tr style="color: black;">' .
+			'<td width="100"></td>' .
+			'<td width="100"></td>' .
+			'<td width="160"></td>' .
+			'<td width="80"></td>' .
+			'<td width="40"></td>' .
+			// '<td width="80"></td>' .
+			'<td width="160" style="' . $totalStyle . '">' . ucfirst($k) . '</td>' .
+			'<td width="80" style="' . $totalStyle . '">' . formatCurrency($v, '$0.00') . '</td>' .
+			'</tr> ';
+		}
+	}
+
+	// Add balance
+	$tbl = $tbl . '<tr style="color: black;">' .
+	'<td width="100"></td>' .
+	'<td width="100"></td>' .
+	'<td width="160"></td>' .
+	'<td width="80"></td>' .
+	'<td width="40"></td>' .
+	// '<td width="80"></td>' .
+	'<td width="160" style="' . $balanceStyle . '"><b>Balance Due</b></td>' .
+	'<td width="80" style="' . $balanceStyle . '"><b>' . formatCurrency($datatotal->balance, '$0.00') . '</b></td>' .
+	'</tr> ';
+
+	$tbl = $tbl .
 	'</tbody> ' .
 	'</table> ' ;
 	return $tbl;

@@ -7,42 +7,50 @@
   },
   "invoicedata" : {
     "number" : {
-      "label": "Invoice #",
-      "value": "15359"
+      "label" : "Invoice #",
+      "value" : "15359"
     },
     "for" : {
-      "label": "For",
-      "value": "Your rug stuff"
+      "label" : "For",
+      "value" : "Your rug stuff"
     },
     "date" : {
-      "label": "Date",
-      "value": "July 16, 2022"
+      "label" : "Date",
+      "value" : "July 16, 2022"
     },
     "amount" : {
-      "label": "Amount Due",
-      "value": "19800"
+      "label" : "Amount Due",
+      "value" : "19800"
     }
   },
-  "items" : [
-    {
-      "imageurl": "https://www.thescarab.com/images/rugs/10019011/2600x10000/10019011.JPG",
-      "description": "3' 09\" x 10' 05\" Flatweave Traditional Rug",
-      "itemid": "Rug #123937",
-      "unitcost": "5900",
-      "qty": "1",
-      "discount": "",
-      "tax": "490",
-      "price": "5900"
+  "items" : {
+    "total" : {
+      "total" : "19800",
+      "payments" : "0",
+      "credits" : "0",
+      "balance" : "19800"
     },
-    {
-      "imageurl": "https://www.thescarab.com/images/rugs/10019035/2600x10000/10019035.JPG",
-      "description": "9' 00\" x 12' 00\" Hand Knotted Western Rugg",
-      "rugid": "Rug #10019035",
-      "unitcost": "5900",
-      "qty": "2",
-      "discount": "2000",
-      "tax": "390",
-      "price": "4900"
-    }
-  ]
+    "list" : [
+      {
+        "imageurl" : "https://www.thescarab.com/images/rugs/10019011/2600x10000/10019011.JPG",
+        "description" : "3' 09\" x 10' 05\" Flatweave Traditional Rug",
+        "rugid" : "Rug #123937",
+        "unitcost" : "5900",
+        "qty" : "1",
+        "discount" : "",
+        "tax" : "490",
+        "price" : "5900"
+      },
+      {
+        "imageurl" : "https://www.thescarab.com/images/rugs/10019035/2600x10000/10019035.JPG",
+        "description" : "9' 00\" x 12' 00\" Hand Knotted Western Rugg",
+        "rugid" : "Rug #10019035",
+        "unitcost" : "5900",
+        "qty" : "2",
+        "discount" : "2000",
+        "tax" : "390",
+        "price" : "4900"
+      }
+    ]
+  }
 }

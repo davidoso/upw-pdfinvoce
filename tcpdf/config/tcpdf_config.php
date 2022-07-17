@@ -174,7 +174,7 @@ define ('PDF_FONT_NAME_DATA', 'helvetica');
 /**
  * Default data font size.
  */
-define ('PDF_FONT_SIZE_DATA', 8);
+define ('PDF_FONT_SIZE_DATA', 9);
 
 /**
  * Default monospaced font name.

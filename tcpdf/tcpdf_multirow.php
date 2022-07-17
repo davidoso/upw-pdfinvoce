@@ -8,31 +8,56 @@ class MYPDF extends TCPDF {
 
             // Set font
             // $this->SetFont('helvetica', 'B', 20);
-            $this->SetFont('helvetica', 'B', 12);
-            $this->setCellPaddings(2, 0, 2, 1);
-            $this->Cell(0, 0, 'he Scarab', 0, 1, 'L', 0, '', 0);
+            $this->SetFont('helvetica', 'B', PDF_FONT_SIZE_MAIN);
+            $this->setCellPaddings(PDF_MARGIN_LEFT, 0, 0, 0);
+            $this->Cell(0, 0, 'The Scarab', 0, 1, 'L', 0, '', 0);
             // $this->Cell(120, 5, 'The Scarab', 1, 'L', 0, 1);
             // $this->setCellPaddings(2, 2, 0, 0);
             // $this->Ln(2);
 
-            $this->SetFont('helvetica', 'R', 10);
+            $this->SetTextColor(66,66,66);
+            // $this->SetTextColor(255,152,0);
+            $this->SetFont('helvetica', 'R', PDF_FONT_SIZE_MAIN);
+            // $this->setCellPaddings(2, 0, 0, 0);
             // $this->Cell(120, 5, 'The Scarab', 1, 'L', 0, 1);
 
             // Title
             // $this->Cell(0, 30, 'Adrress here', 0, false, 'L', 0, '', 0, false, 'M', 'M');
-            $this->Cell(0, 0, 'Adrress here', 0, 1, 'L', 0, '', 0);
-            $this->Cell(0, 0, 'Adrress here 2', 0, 1, 'L', 0, '', 0);
+        // $this->SetX(PDF_MARGIN_LEFT * 2);
+
+            $this->Cell(0, 0, '201 Main Street | P.O. Box 579', 0, 1, 'L', 0, '', 0);
+            $this->Cell(0, 0, 'Minturn, CO 81647', 0, 1, 'L', 0, '', 0);
+            $this->Cell(0, 0, '970-949-1730', 0, 1, 'L', 0, '', 0);
+            $this->Cell(0, 0, 'info@thescarab.com', 0, 1, 'L', 0, '', 0);
+            $this->setCellPaddings(PDF_MARGIN_LEFT, 0, 0, 2);
+            // $this->Cell(0, 0, '', 0, 1, 'L', 0, '', 0);
+            $this->Ln(1);
+
+            // This keeps contact info inside rectangle
             // Logo
-            $image_file = K_PATH_IMAGES.'logo.jpg';
-            $this->Image($image_file, 180, 5, 30, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            // $image_file = K_PATH_IMAGES.'logo.jpg';
+            // $this->Image($image_file, 170, 5, 40, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
             $this->SetLineStyle( array( 'width' => 0.3, 'color' => array(80, 80, 80)));
 // $this->Rect(PDF_MARGIN_LEFT, $this->GetY(), $this->getPageWidth() - PDF_MARGIN_LEFT - PDF_MARGIN_RIGHT, $this->getPageHeight() - $this->GetY() - PDF_MARGIN_BOTTOM);
         $this->RoundedRect(PDF_MARGIN_LEFT, $this->GetY(), $this->getPageWidth() - PDF_MARGIN_LEFT - PDF_MARGIN_RIGHT, $this->getPageHeight() - $this->GetY() - PDF_MARGIN_BOTTOM, 3.50, '1111'/*, 'DF'*/);
             
+
+        // Logo
+        $image_file = K_PATH_IMAGES.'logo.jpg';
+        $this->Image($image_file, 165, 5, 40, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
+        // $this->SetY($this->GetY() + 10);
+
+        // $this->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT, true);
+		// $this->SetHeaderMargin(PDF_MARGIN_HEADER);
+		// $this->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+		// // Set auto page breaks
+		// $this->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         }
 
-    public function MultiRow($leftWidth, $left, $right) {
+    /*public function MultiRow($leftWidth, $left, $right) {
         // Disable auto page break if cell size can't fit on current page
         if($this->GetY() > 253) {
             $this->AddPage();
@@ -72,30 +97,23 @@ class MYPDF extends TCPDF {
         }
         $this->setPage(max($page_end_1, $page_end_2));
         $this->SetXY($this->GetX(), $ynew);
-    }
+    }*/
 
     public function Footer() {
-        $image_file = K_PATH_IMAGES . 'logo.jpg';
-        // Set Sitefotos image
-        // $this->Image($image_file, 20, 268, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-
-            
-
         // Set footer font, position and style
-        $this->SetFont('helvetica', 'BI', 8);
+        $this->SetFont('helvetica', 'BI', PDF_FONT_SIZE_DATA);
+        $this->SetTextColor(66, 66, 66);
         $this->SetY(264.5);
-        // Dont show line
-		// $this->SetLineStyle(array('width' => 0.3, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(80, 80, 80)));
+
         // Set page number
         $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), '', false, 'R', 0, '', 0, false, 'T', 'M');
-            $this->Ln(2);
-        
-        $this->SetFont('helvetica', 'R', 8);
-$this->setCellPaddings(2, 0, 2, 1);
-$this->Cell(0, 0, 'Terms', 0, 1, 'L', 0, '', 0);
-$this->Cell(0, 0, 'All sales items are final. No returns after 10 days. Balance due on the date of sale', 0, 1, 'L', 0, '', 0);
-            //Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=0, $link='', $stretch=0, $ignore_min_height=false, $calign='T', $valign='M')
+        $this->Ln(2);
 
+        // Set disclaimer
+        $this->SetFont('helvetica', 'R', PDF_FONT_SIZE_DATA);
+        $this->setCellPaddings(2, 0, 2, 1);
+        $this->Cell(0, 0, 'Terms', 0, 1, 'L', 0, '', 0);
+        $this->Cell(0, 0, 'All sale items are final. No returns after 10 days. Balance due on the date of sale.', 0, 1, 'L', 0, '', 0);
     }
 }
 ?>

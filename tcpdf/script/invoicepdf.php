@@ -101,7 +101,7 @@ function parseJSONPDF($config/*, $json*/) {
 
 		// Set default header data
 		// $pdf->SetHeaderData($headerLogo, PDF_HEADER_LOGO_WIDTH, $headerTitle, PDF_HEADER_STRING);
-		$pdf->SetHeaderData($headerLogo, PDF_HEADER_LOGO_WIDTH, 'asd<br>asd2', PDF_HEADER_STRING);
+		// $pdf->SetHeaderData($headerLogo, PDF_HEADER_LOGO_WIDTH, 'asd<br>asd2', PDF_HEADER_STRING);
 
 		// Set header and footer fonts
 		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -111,196 +111,108 @@ function parseJSONPDF($config/*, $json*/) {
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 		// Set margins
-		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		// $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT, true);
+		$pdf->SetMargins(PDF_MARGIN_LEFT + 2, PDF_MARGIN_TOP + PDF_MARGIN_FOOTER, PDF_MARGIN_RIGHT, true);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
 		// Set auto page breaks
-		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM + PDF_MARGIN_FOOTER);
 
 		// Set image scale factor
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 		// Add a page
 		$pdf->AddPage();
-		
-// 		$pdf->SetLineStyle( array( 'width' => 15, 'color' => array(0,0,0)));
-
-// $pdf->Line(0,0,$pdf->getPageWidth(),0); 
-// $pdf->Line($pdf->getPageWidth(),0,$pdf->getPageWidth(),$pdf->getPageHeight());
-// $pdf->Line(0,$pdf->getPageHeight(),$pdf->getPageWidth(),$pdf->getPageHeight());
-// $pdf->Line(0,0,0,$pdf->getPageHeight());
-
-		// Set default form properties
-		// $pdf->setFormDefaultProp(array('lineWidth' => $lineWidth, 'borderStyle' => 'solid', 'fillColor' => $subheaderColor, 'strokeColor' => $borderColor));
-		// $pdf->SetFont($font, $titleFontStyle, $titleFontSize);	// Form title font
-		// $pdf->MultiCell(0, 5, $formTitle, 0, 'C', 0);
-		// $pdf->Ln(5);
-		// $pdf->SetFont($font, $bodyFontStyle, $bodyFontSize);	// JSON body font
-
-		// MultiCell($w, $h, $txt, $border=0, $align='J', $fill=0, $ln=1
 
 		// padding
 		// Left=2, Top=4, Right=6, Bottom=8\
 		
 
-		$pdf->Ln(5);
+		$pdf->Ln(4);
         $y_start = $pdf->GetY();
 
-		// padding left 5
-		// custom padding = 2 CONSTANT
-        $pdf->SetX(PDF_MARGIN_RIGHT + 2);
+        $pdf->SetX(PDF_MARGIN_LEFT * 3);
+		$pdf->setCellPaddings(PDF_MARGIN_LEFT, 0, PDF_MARGIN_RIGHT * 2, 1);
 
 		// Client data
 		// First name
 		// $pdf->SetFillColor(233, 236, 239);
-        $pdf->SetFont('helvetica', 'B', 12);
-		$pdf->setCellPaddings(0, 0, 2, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(120, 5, '1 [LEFT] Worth Interito Worth Interito Worth Interito', 1, 'L', 0, 1);
-		$pdf->setCellPaddings(2, 2, 0, 0);
-		// $pdf->Ln(1);
+        $pdf->SetFont('helvetica', 'B', 10);
+		
+		$company = isset($data->customerdata->company) ? $data->customerdata->company : '';
 
-        $pdf->SetX(2 + PDF_MARGIN_RIGHT);
+		$pdf->MultiCell(130, 5, $company, 0, 'L', 0, 1);
+
         $pdf->SetFont('helvetica', 'R', 10);
-		$pdf->SetFillColor(233, 236, 239);
-		$pdf->setCellPaddings(0, 0, 2, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(100, 5, '3 [LEFT] Worth Interito Worth Interito Worth Interito', 1, 'L', 0, 1);
-		// $pdf->MultiCell(0, 5, 'Worth Interitos', 0, 'L', 0);
-		$pdf->setCellPaddings(2, 2, 0, 0);
-		// $pdf->TextField('firstname', 140, 10, array(), array('v'=>$data[0]->value, 'dv'=>$data[0]->value));
-		// $pdf->Ln(1);
 
-        $pdf->SetX(2 + PDF_MARGIN_RIGHT);
-		$pdf->SetFillColor(233, 236, 239);
-		$pdf->setCellPaddings(0, 0, 2, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(100, 5, '4 [LEFT] Worth Interito Worth Interito Worth Interito', 1, 'L', 0, 1);
-		// $pdf->MultiCell(0, 5, 'Worth Interitos', 0, 'L', 0);
-		$pdf->setCellPaddings(2, 2, 0, 0);
-		// $pdf->TextField('firstname', 140, 10, array(), array('v'=>$data[0]->value, 'dv'=>$data[0]->value));
-		// $pdf->Ln(10);
-
-        $pdf->SetX(2 + PDF_MARGIN_RIGHT);
-		$pdf->SetFillColor(233, 236, 239);
-		$pdf->setCellPaddings(0, 0, 2, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(100, 5, '5 [LEFT] Worth Interito Worth Interito Worth Interito', 1, 'L', 0, 1);
-		// $pdf->MultiCell(0, 5, 'Worth Interitos', 0, 'L', 0);
-		$pdf->setCellPaddings(2, 2, 0, 0);
-		// $pdf->TextField('firstname', 140, 10, array(), array('v'=>$data[0]->value, 'dv'=>$data[0]->value));
-		$pdf->Ln(1);
+		// foreach($jsonfile->elements as $e)
+		// 	printField($e, $pdf, $knownTypes, $imageTypes, $ignoreTypes, $titleWidth, $titleColor, 
+		foreach($data->customerdata as $k => $v) {
+			if($k != 'company') {
+				$pdf->SetX(PDF_MARGIN_LEFT * 3);
+				$pdf->MultiCell(130, 5, $v, 0, 'L', 0, 1);
+			}
+		}
 
 		//
 		// invoice data
 		//
 
-        $pdf->SetFont('helvetica', 'R', 11);
+		// $pdf->SetLineStyle(array('width' => 0.3, 'cap' => 'butt', 'join' => 'miter', 'dash' => 4, 'color' => array(255, 0, 0)));
+
+
+        $pdf->SetFont('helvetica', 'R', 9);
 		// padding 10
 		// 60 width
-        $x_start = $pdf->getPageWidth() - PDF_MARGIN_LEFT - 52;
+        // $x_start = $pdf->getPageWidth() - PDF_MARGIN_LEFT - 30;
+        $x_start = PDF_MARGIN_LEFT * 3 + 130;
 
-        $pdf->SetXY($x_start, $y_start);
-		$pdf->SetFillColor(233, 236, 239);
-		$pdf->setCellPaddings(2, 1, 1, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(25, 5, 'invoice #', 1, 'L', 1, 0);
-		$pdf->setCellPaddings(2, 2, 8, 0);
+		$y_index = $y_start;
 
-		$pdf->SetFillColor(233, 236, 239);
-		$pdf->setCellPaddings(1, 1, 2, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(25, 5, '199213', 1, 'R', 1, 1);
-		$pdf->setCellPaddings(2, 2, 8, 0);
-		$pdf->Ln(1);
+		$pdf->SetLineStyle( array( 'width' => 0.5, 'color' => array(80, 80, 80)));
+		foreach($data->invoicedata as $item) {
+			$pdf->SetXY($x_start, $y_index);
+			$pdf->SetFillColor(233, 236, 239);
+			$pdf->setCellPaddings(2, 2, 2, 2);
+			$pdf->MultiCell(25, 5, $item->label, 'B', 'L', 1, 0);
+			$pdf->setCellPaddings(2, 2, 8, 0);
 
-        $y_start = $pdf->GetY();
-        $pdf->SetXY(150, $y_start);
-		$pdf->SetFillColor(233, 236, 239);
-		$pdf->setCellPaddings(1, 1, 1, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(25, 10, 'For', 1, 'L', 1, 0);
-		$pdf->setCellPaddings(2, 2, 8, 0);
+			$pdf->SetFillColor(255, 255, 255);
+			$pdf->setCellPaddings(2, 2, 2, 2);
+			$pdf->MultiCell(35, 5, $item->value, 'B', 'R', 1, 1);
+		// $pdf->Ln(1);
 
-		$pdf->SetFillColor(233, 236, 239);
-		$pdf->setCellPaddings(1, 1, 1, 1);
-		//$pdf->Cell(40, 10, 'Worth Interitos', 0, 0, 'R', 1);
-		$pdf->MultiCell(25, 10, 'Your Rug Stuff', 1, 'L', 1, 1);
-		$pdf->setCellPaddings(2, 2, 8, 0);
-		$pdf->Ln(5);
+			$y_index = $pdf->GetY() + 0.5;
+		}
 
 
+		$tbl = getTable($data->items);
 
+        // $pdf->SetX(2 + PDF_MARGIN_RIGHT);
 		//
 		// items table
 		//
-		$tbl = '<table cellpadding="2" style="font-size: 9;"> ' .
-		'<thead> ' .
-		' <tr style="color: #fff; background-color: #212529; border-color: #32383e; font-weight: bold;"> ' .
-		'  <td width="100" style="border: 1px solid red;" align="center"><b>Image</b></td> ' .
-		'  <td width="100" align="center"><b>Item</b></td> ' .
-		'  <td width="160" align="center"><b>Description</b></td> ' .
-		'  <td width="80" align="center"> <b>Unit cost</b></td> ' .
-		'  <td width="40" align="center"><b>Qty</b></td> ' .
-		'  <td width="80" align="center"><b>Discount</b></td> ' .
-		'  <td width="80" align="center"><b>Tax</b></td> ' .
-		'  <td width="80" align="center"><b>Price</b></td> ' .
-		' </tr> ' .
-		'</thead> ' .
-		'<tbody> ' .
-		' <tr style="color:black;"> ' .
-		'<td width="100" height="100" style="text-align: center; background-color:red; "><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="" width="80" /> </td> ' .
-		'    <td width="100" style="text-align: left; background-color:red;">Rug 123937</td> ' .
-		'    <td width="160" align="left">A table in HTML consists of table cells inside rows and columns<br>A table in HTML consists of table cells inside rows and columns</td> ' .
-		'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-		'<td width="40" align="center">1</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="right">5900</td> ' .
-		' </tr> ' .
-		' <tr style="color:black;"> ' .
-		'<td width="100" height="100" style="text-align: center; background-color:red; "><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="" width="80" /> </td> ' .
-		'    <td width="100" style="text-align: left; background-color:red;">Rug 22</td> ' .
-		'    <td width="160" align="left">A table in HTML consists of table cells insidA table in HTML consists of table cells inside rows and columns</td> ' .
-		'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-		'<td width="40" align="center">1</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="right">5900</td> ' .
-		' </tr> ' .
-		' <tr style="color:black;"> ' .
-		'<td width="100" height="100" align="center"></td> ' .
-		'    <td width="100" style="text-align: left; background-color:red;">Rug 3333</td> ' .
-		'    <td width="160" align="left">A table in HTML consists of table cells inside rows and columns<br>A table in HTML consists of table cells inside rows and columns</td> ' .
-		'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-		'<td width="40" align="center">1</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="right">5900</td> ' .
-		' </tr> ' .
-		' <tr style="color:black;"> ' .
-		'<td width="100" height="100" align="center"></td> ' .
-		'    <td width="100" style="text-align: left; background-color:red;">Rug 4444 no image</td> ' .
-		'    <td width="160" align="left">A table in HTML cos<br> no image</td> ' .
-		'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
-		'<td width="40" align="center">1</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="center">-</td> ' .
-		'<td width="80" align="right">5900</td> ' .
-		' </tr> ' .
-		'</tbody> ' .
-		'</table> ' ;
+
 		
 		// este es el bueno
+		// CONFIG MARGIN TABLE
         // $pdf->SetX(PDF_MARGIN_RIGHT + 2);
         
-		$pdf->SetXY(PDF_MARGIN_RIGHT + 2, 200);
+		// TEST END PAGE
+		// $pdf->SetXY(PDF_MARGIN_RIGHT + 2, 200);
+
+		$pdf->SetX(PDF_MARGIN_RIGHT + 2);
+
+		$pdf->Ln(4);
+
 
 		$pdf->writeHTML($tbl, true, false, false, false, '');
 		
+// // set some text for example
+// $txt = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed imperdiet lectus. Phasellus quis velit velit, non condimentum quam. Sed neque urna, ultrices ac volutpat vel, laoreet vitae augue. Sed vel velit erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras eget velit nulla, eu sagittis elit. Nunc ac arcu est, in lobortis tellus. Praesent condimentum rhoncus sodales. In hac habitasse platea dictumst. Proin porta eros pharetra enim tincidunt dignissim nec vel dolor. Cras sapien elit, ornare ac dignissim eu, ultricies ac eros. Maecenas augue magna, ultrices a congue in, mollis eu nulla. Nunc venenatis massa at est eleifend faucibus. Vivamus sed risus lectus, nec interdum nunc.
 
-
+// Fusce et felis vitae diam lobortis sollicitudin. Aenean tincidunt accumsan nisi, id vehicula quam laoreet elementum. Phasellus egestas interdum erat, et viverra ipsum ultricies ac. Praesent sagittis augue at augue volutpat eleifend. Cras nec orci neque. Mauris bibendum posuere blandit. Donec feugiat mollis dui sit amet pellentesque. Sed a enim justo. Donec tincidunt, nisl eget elementum aliquam, odio ipsum ultrices quam, eu porttitor ligula urna at lorem. Donec varius, eros et convallis laoreet, ligula tellus consequat felis, ut ornare metus tellus sodales velit. Duis sed diam ante. Ut rutrum malesuada massa, vitae consectetur ipsum rhoncus sed. Suspendisse potenti. Pellentesque a congue massa.';
 
 		// Set border style
 		// $pdf->SetLineStyle(array('width' => $borderWidth, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => $borderColor));
@@ -317,6 +229,67 @@ function parseJSONPDF($config/*, $json*/) {
 		$pdf->Output($outputName, $outputMode);
 	}
 }
+
+function getTable($data) {
+	$tbl = '<table cellpadding="2" style="font-size: 10px; margin-top: 10px;"> ' .
+	'<thead style="margin-top: 10px;"> ' .
+	' <tr style="color: #fff; background-color: #212529; border-color: #32383e; font-weight: bold;"> ' .
+	'  <td width="100" style="border: 1px solid red;" align="center"><b>Image</b></td> ' .
+	'  <td width="100" align="center"><b>Item</b></td> ' .
+	'  <td width="160" align="center"><b>Description</b></td> ' .
+	'  <td width="80" align="center"> <b>Unit cost</b></td> ' .
+	'  <td width="40" align="center"><b>Qty</b></td> ' .
+	'  <td width="80" align="center"><b>Discount</b></td> ' .
+	'  <td width="80" align="center"><b>Tax</b></td> ' .
+	'  <td width="80" align="center"><b>Price</b></td> ' .
+	' </tr> ' .
+	'</thead> ' .
+	'<tbody> ' .
+	' <tr style="color:black;"> ' .
+	'<td width="100" height="100" style="text-align: center; background-color:red; "><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="" width="80" /> </td> ' .
+	'    <td width="100" style="text-align: left; background-color:red;">Rug 123937</td> ' .
+	'    <td width="160" align="left">A table in HTML consists of table cells inside rows and columns<br>A table in HTML consists of table cells inside rows and columns</td> ' .
+	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
+	'<td width="40" align="center">1</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="right">5900</td> ' .
+	' </tr> ' .
+	' <tr style="color:black;"> ' .
+	'<td width="100" height="100" style="text-align: center; background-color:red; "><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="" width="80" /> </td> ' .
+	'    <td width="100" style="text-align: left; background-color:red;">Rug 22</td> ' .
+	'    <td width="160" align="left">A table in HTML consists of table cells insidA table in HTML consists of table cells inside rows and columns</td> ' .
+	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
+	'<td width="40" align="center">1</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="right">5900</td> ' .
+	' </tr> ' .
+	' <tr style="color:black;"> ' .
+	'<td width="100" height="100" align="center"></td> ' .
+	'    <td width="100" style="text-align: left; background-color:red;">Rug 3333</td> ' .
+	'    <td width="160" align="left">A table in HTML consists of table cells inside rows and columns<br>A table in HTML consists of table cells inside rows and columns</td> ' .
+	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
+	'<td width="40" align="center">1</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="right">5900</td> ' .
+	' </tr> ' .
+	' <tr style="color:black;"> ' .
+	'<td width="100" height="100" align="center"></td> ' .
+	'    <td width="100" style="text-align: left; background-color:red;">Rug 4444 no image</td> ' .
+	'    <td width="160" align="left">A table in HTML cos<br> no image</td> ' .
+	'<td width="80" style="text-align: right; vertical-align: bottom;">1900</td> ' .
+	'<td width="40" align="center">1</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="center">-</td> ' .
+	'<td width="80" align="right">5900</td> ' .
+	' </tr> ' .
+	'</tbody> ' .
+	'</table> ' ;
+	return $tbl;
+}
+
 
 
 /*function printField($e, $pdf, $knownTypes, $imageTypes, $ignoreTypes, $titleWidth, $titleColor, $subheaderColor, $imageWidth, $imageHeight, $font, $bodyFontStyle, $bodyFontSize) {

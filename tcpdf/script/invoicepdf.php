@@ -16,7 +16,7 @@ require_once('../tcpdf_custom.php');
  * @param config			Associative array, contains 8 keys:
 	* @param jsonfilepath	JSON filepath to fetch data from (required)
  	* @param outputName		Output PDF filename
- 	* @param outputMode		I: view on browser. D: download directly
+ 	* @param outputMode		Choose "I" or "D". I: view on browser. D: download directly
 	* @param headerLogo		The Scarab logo on "images" folder
 	* @param invoiceRowColorRGB		RGB color array for section: invoice
 	* @param itemRowOddColorHEX		HEX color array for each odd row on table. Default #FFF white
@@ -26,7 +26,7 @@ require_once('../tcpdf_custom.php');
 $config = array(
 	"jsonfilepath" => "jsonSamples/test1.json",
 	"outputName" => "Invoice.pdf",
-	"outputMode" => "D",
+	"outputMode" => "I",
 	"headerLogo" => "logo.jpg",
 	"invoiceRowColorRGB" => array(233, 236, 239),
 	"itemRowOddColorHEX" => "#FFF",

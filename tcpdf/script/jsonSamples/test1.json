@@ -20,15 +20,15 @@
     },
     "amount" : {
       "label" : "Amount Due",
-      "value" : "18760"
+      "value" : "19262.5"
     }
   },
   "items" : {
     "total" : {
-      "total" : "18760",
+      "total" : "19262.50",
       "payments" : "0",
       "credits" : "0",
-      "balance" : "18760"
+      "balance" : "19262.50"
     },
     "list" : [
       {
@@ -59,16 +59,16 @@
         "qty" : "2",
         "discount" : "500",
         "tax" : "70",
-        "price" : "6070"
+        "price" : "6570"
       },
       {
         "description" : "Very sticky",
         "rugid" : "Tape",
-        "unitcost" : "140",
-        "qty" : "4",
+        "unitcost" : "140.5",
+        "qty" : "5",
         "discount" : "0",
         "tax" : "0",
-        "price" : "700"
+        "price" : "702.5"
       }
     ]
   }

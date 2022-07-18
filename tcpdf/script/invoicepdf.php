@@ -5,42 +5,33 @@
 // Date:				July 2022
 // PHP version:			7.2.3
 // --------------------------------------------------------------------------------------
+
 // SETUP 1/2: Change path to include main TCPDF library and customize defined constants on config/tcpdf_config.php
 require_once('../tcpdf_include.php');
 // Extend TCPDF with custom functions, eg. Header() Footer() and MultiRow()
 require_once('../tcpdf_custom.php');
+
 // SETUP 2/2: Customize input parameters
 /**
- * @param config			Associative array, contains 16 keys:
+ * @param config			Associative array, contains 8 keys:
+	* @param jsonfilepath	JSON filepath to fetch data from (required)
  	* @param outputName		Output PDF filename
  	* @param outputMode		I: view on browser. D: download directly
- 	* @param titleWidth		Title column width. Default: 50. Recommended range value: 30-90. Default unit: mm
-	* @param titleColor		Title column background color (RGB array)
-	* @param subheaderColor	Subheader row background color (RGB array)
-	* @param imageWidth		Image width. Default: 35
-	* @param imageHeight	Image height. Default: 25
-	* @param lineWidth		Line width. Default: 1
-	* @param borderWidth	Border width. Default: 0.1
-	* @param borderColor	Border color (RGB array)
-	* @param font			Title and body font
-	* @param titleFontStyle	Title font style. Default: bold, italic
-	* @param titleFontSize	Title font size. Default: 20
-	* @param bodyFontStyle	Body font style. Default: normal
-	* @param bodyFontSize	Body font size. Default: 10
 	* @param headerLogo		The Scarab logo on "images" folder
- * @param json				Associative array, contains 3 keys:
-	* @param filepath		JSON filepath (required)
-	* @param headerTitle	Header title (appears on every page)
-	* @param formTitle		Form title (appears only at the beginning, before printing JSON data)
+	* @param invoiceRowColorRGB		RGB color array for section: invoice
+	* @param itemRowOddColorHEX		HEX color array for each odd row on table. Default #FFF white
+	* @param itemRowEvenColorHEX	HEX color array for each even row on table. Default #E9ECEF light gray
+	* @param tableHeaderColorHEX	HEX color array for table headers. Default #212529 dark
 **/
 $config = array(
 	"jsonfilepath" => "jsonSamples/test1.json",
 	"outputName" => "Invoice.pdf",
-	"outputMode" => "I",
+	"outputMode" => "D",
 	"headerLogo" => "logo.jpg",
 	"invoiceRowColorRGB" => array(233, 236, 239),
-	"itemRowOddColorHEX" => "#fff",
-	"itemRowEvenColorHEX" => "#E9ECEF"
+	"itemRowOddColorHEX" => "#FFF",
+	"itemRowEvenColorHEX" => "#E9ECEF",
+	"tableHeaderColorHEX" => "#212529",
 );
 
 
@@ -67,6 +58,7 @@ function createPDF($config) {
 		$invoiceRowColorRGB = $config['invoiceRowColorRGB'];
 		$itemRowOddColorHEX = $config['itemRowOddColorHEX'];
 		$itemRowEvenColorHEX = $config['itemRowEvenColorHEX'];
+		$tableHeaderColorHEX = $config['tableHeaderColorHEX'];
 
 		// Retrieve JSON data
 		$jsonfile = file_get_contents($jsonfilepath);
@@ -145,7 +137,7 @@ function createPDF($config) {
 			$pdf->SetFillColor(255, 255, 255);
 			$pdf->setCellPaddings(2, 2, 2, 2);
 
-			if(strpos(strtolower($item->label), 'amount') > 1) {
+			if(strpos(strtolower($item->label), 'amount') > -1) {
 				$pdf->MultiCell(35, 5, formatCurrency($item->value, '$0.00'), 'B', 'R', 1, 1);
 			}
 			else {
@@ -158,8 +150,7 @@ function createPDF($config) {
 		//
 		// SET ITEMS TABLE SECTION
 		//
-		$tbl = getTable($data->items, $itemRowEvenColorHEX, $itemRowOddColorHEX);
-		// echo $tbl;
+		$tbl = getTable($data->items, $itemRowEvenColorHEX, $itemRowOddColorHEX, $tableHeaderColorHEX);
 
 		$pdf->Ln(4);
 		$pdf->SetX(PDF_MARGIN_RIGHT + 2);
@@ -179,23 +170,26 @@ function formatCurrency($val, $zeroValue) {
 		return '$' . number_format($val, 2);
 }
 
-function getTable($items, $itemRowEvenColorHEX, $itemRowOddColorHEX) {
+function getTable($items, $itemRowEvenColorHEX, $itemRowOddColorHEX, $headerColor) {
 	$datatotal = $items->total;
 	$datalist = $items->list;
 
 	// Add thead
-	$headerStyle = 'border-top: 1px solid #212529;';
+	$headerStyle = 'border-top: 1px solid ' . $headerColor . ';';
+	$firstHeaderStyle = 'border-left: 1px solid ' . $headerColor . '; border-top: 1px solid ' . $headerColor . ';';
+	$lastHeaderStyle = 'border-right: 1px solid ' . $headerColor . '; border-top: 1px solid ' . $headerColor . ';';
+
 	$tbl = '<table cellpadding="5">' .
 	'<thead>' .
-		'<tr style="color: #fff; background-color: #212529; font-weight: bold; font-size: 12px;">' .
-			'<td width="100" align="center" style="border-left: 1px solid #212529; ' . $headerStyle . '"><b>Image</b></td>' .
-			'<td width="100" align="center" style="' . $headerStyle . '"><b>Item</b></td>' .
-			'<td width="160" align="center" style="' . $headerStyle . '"><b>Description</b></td>' .
-			'<td width="80" align="center" style="' . $headerStyle . '"><b>Unit cost</b></td>' .
-			'<td width="40" align="center" style="' . $headerStyle . '"><b>Qty</b></td>' .
-			'<td width="80" align="center" style="' . $headerStyle . '"><b>Discount</b></td>' .
-			'<td width="80" align="center" style="' . $headerStyle . '"><b>Tax</b></td>' .
-			'<td width="80" align="right" style="border-right: 1px solid #212529; ' . $headerStyle . '"><b>Price</b></td>' .
+		'<tr style="color: #FFF; background-color: ' . $headerColor . '; font-weight: bold; font-size: 12px;">' .
+			'<td width="100" align="center"	style="' . $firstHeaderStyle . '"><b>Image</b></td>' .
+			'<td width="100" align="center"	style="' . $headerStyle . '"><b>Item</b></td>' .
+			'<td width="160" align="center"	style="' . $headerStyle . '"><b>Description</b></td>' .
+			'<td width="80" align="center"	style="' . $headerStyle . '"><b>Unit cost</b></td>' .
+			'<td width="40" align="center"	style="' . $headerStyle . '"><b>Qty</b></td>' .
+			'<td width="80" align="center"	style="' . $headerStyle . '"><b>Discount</b></td>' .
+			'<td width="80" align="center"	style="' . $headerStyle . '"><b>Tax</b></td>' .
+			'<td width="80" align="right"	style="' . $lastHeaderStyle . '"><b>Price</b></td>' .
 		'</tr>' .
 	'</thead>' .
 	'<tbody style="font-size: 10px;">';
@@ -221,7 +215,6 @@ function getTable($items, $itemRowEvenColorHEX, $itemRowOddColorHEX) {
 		$tax = formatCurrency($tax, '$0.00');
 		$price = formatCurrency($price, '$0.00');
 
-		// DAVID PENDIENTE: imageurl null
 		$tbl = $tbl .
 		'<tr style="color: black;">' .
 			($imageurl == ''
@@ -246,7 +239,7 @@ function getTable($items, $itemRowEvenColorHEX, $itemRowOddColorHEX) {
 	}
 
 	$totalStyle = 'text-align: right; border: 1px solid #505050;';
-	$balanceStyle = 'text-align: right; border: 1px solid #505050; color: #fff; background-color: #212529;';
+	$balanceStyle = $totalStyle . ' color: #FFF; background-color: ' . $headerColor .';';
 
 	// Add totals
 	foreach($datatotal as $k => $v) {
@@ -265,7 +258,7 @@ function getTable($items, $itemRowEvenColorHEX, $itemRowOddColorHEX) {
 		}
 	}
 
-	// Add balance
+	// Add balance due
 	$tbl = $tbl .
 	'<tr style="color: black;">' .
 		'<td width="100"></td>' .

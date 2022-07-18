@@ -16,19 +16,19 @@
     },
     "date" : {
       "label" : "Date",
-      "value" : "July 16, 2022"
+      "value" : "July 17, 2022"
     },
     "amount" : {
       "label" : "Amount Due",
-      "value" : "19800"
+      "value" : "18760"
     }
   },
   "items" : {
     "total" : {
-      "total" : "19800",
+      "total" : "18760",
       "payments" : "0",
       "credits" : "0",
-      "balance" : "19800"
+      "balance" : "18760"
     },
     "list" : [
       {
@@ -38,18 +38,37 @@
         "unitcost" : "5900",
         "qty" : "1",
         "discount" : "",
-        "tax" : "490",
-        "price" : "5900"
+        "tax" : "10",
+        "price" : "5910"
       },
       {
         "imageurl" : "https://www.thescarab.com/images/rugs/10019035/2600x10000/10019035.JPG",
-        "description" : "9' 00\" x 12' 00\" Hand Knotted Western Rugg",
+        "description" : "9' 00\" x 12' 00\" Hand Knotted Western Rug **LONG TEXT SAMPLE** All rugs are handmade with natural fibers which includes: wool, silk, aloe and hemp. As with all rugs, the colors may vary in different physical space and light.",
         "rugid" : "Rug #10019035",
-        "unitcost" : "5900",
+        "unitcost" : "4000",
         "qty" : "2",
         "discount" : "2000",
-        "tax" : "390",
-        "price" : "4900"
+        "tax" : "80",
+        "price" : "6080"
+      },
+      {
+        "imageurl" : "https://www.thescarab.com/images/rugs/10018937/2600x10000/10018937.JPG",
+        "description" : "2' 01\" x 3' 00\" Hand Knotted Western Rug",
+        "rugid" : "Rug #10019892",
+        "unitcost" : "3500",
+        "qty" : "2",
+        "discount" : "500",
+        "tax" : "70",
+        "price" : "6070"
+      },
+      {
+        "description" : "Very sticky",
+        "rugid" : "Tape",
+        "unitcost" : "140",
+        "qty" : "4",
+        "discount" : "0",
+        "tax" : "0",
+        "price" : "700"
       }
     ]
   }

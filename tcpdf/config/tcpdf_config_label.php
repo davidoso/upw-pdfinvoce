@@ -91,7 +91,7 @@
 // define ('K_BLANK_IMAGE', '_blank.png');
 
 /**
- * Page format. Dymo LabelWriter 450 label 30334: 2-1/8" x 1-1/8"
+ * Page format. Dymo LabelWriter 450 label 30334 custom page size: 2-1/8" x 1-1/8"
  */
 define ('PDF_LABEL_PAGE_FORMAT', array(53.97, 28.57));
 

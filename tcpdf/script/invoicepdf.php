@@ -8,6 +8,7 @@
 
 // SETUP 1/2: Change path to include main TCPDF library and customize defined constants on config/tcpdf_config.php
 require_once('../tcpdf_include.php');
+
 // Extend TCPDF with custom functions, eg. Header() Footer() and MultiRow()
 require_once('../tcpdf_custom.php');
 
@@ -24,7 +25,7 @@ require_once('../tcpdf_custom.php');
 	* @param tableHeaderColorHEX	HEX color array for table headers. Default #212529 dark
 **/
 $config = array(
-	"jsonfilepath" => "jsonSamples/test1.json",
+	"jsonfilepath" => "jsonSamples/test1_invoice.json",
 	"outputName" => "Invoice.pdf",
 	"outputMode" => "I",
 	"headerLogo" => "logo.jpg",

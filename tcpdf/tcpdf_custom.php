@@ -25,7 +25,7 @@ class MYPDF extends TCPDF {
         // This keeps contact info inside rectangle
         // $this->Image($image_file, 165, 5, 40, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
-        $this->SetLineStyle( array( 'width' => 0.3, 'color' => array(80, 80, 80)));
+		$this->SetLineStyle( array('width' => 0.3, 'color' => array(80, 80, 80)) );
         // $this->Rect(PDF_MARGIN_LEFT, $this->GetY(), $this->getPageWidth() - PDF_MARGIN_LEFT - PDF_MARGIN_RIGHT, $this->getPageHeight() - $this->GetY() - PDF_MARGIN_BOTTOM);
         $this->RoundedRect(PDF_MARGIN_LEFT, $this->GetY(), $this->getPageWidth() - PDF_MARGIN_LEFT - PDF_MARGIN_RIGHT, $this->getPageHeight() - $this->GetY() - PDF_MARGIN_BOTTOM, 3.50, '1111'/*, 'DF'*/);
 

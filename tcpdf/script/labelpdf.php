@@ -19,14 +19,15 @@ require_once('../config/tcpdf_config_label.php');
 
 // SETUP 2/2: Customize input parameters
 /**
- * @param config			Associative array, contains 7 keys:
+ * @param config			Associative array, contains 8 keys:
 	* @param jsonfilepath	JSON filepath to fetch data from (required)
  	* @param outputName		Output PDF filename
  	* @param outputMode		Choose "I" or "D". I: view on browser. D: download directly
 	* @param showTopBorder	Top separator line below "The Scarab" title. true / false. Default true
 	* @param showLOPCBottom		"LOPC" label above price tag and barcode. true / false. Default true
 	* @param showBarcodeBorder	Rectangle border around barcode: true / false. Default false
-	* @param alignPrice			Choose align price text above barcode: "L", "C" or "R". Default "R"
+	* @param alignBarcode		Align barcode at the bottom: "L", "C" or "R". Default "C"
+	* @param alignPrice			Align price label above barcode: "L", "C" or "R". Default "R"
 **/
 // Sample 1.pdf
 $config = array(
@@ -36,6 +37,7 @@ $config = array(
 	"showTopBorder" => true,
 	"showLOPCBottom" => true,
 	"showBarcodeBorder" => false,
+	"alignBarcode" => "C",
 	"alignPrice" => "R",
 );
 
@@ -47,6 +49,7 @@ $config = array(
 // 	"showTopBorder" => false,
 // 	"showLOPCBottom" => false,
 // 	"showBarcodeBorder" => true,
+// 	"alignBarcode" => "L",
 // 	"alignPrice" => "C",
 // );
 
@@ -73,6 +76,7 @@ function createPDF($config) {
 		$showTopBorder = isset($config['showTopBorder']) ? $config['showTopBorder'] : true;
 		$showLOPCBottom = isset($config['showLOPCBottom']) ? $config['showLOPCBottom'] : true;
 		$showBarcodeBorder = isset($config['showBarcodeBorder']) ? $config['showBarcodeBorder'] : false;
+		$alignBarcode = isset($config['alignBarcode']) ? $config['alignBarcode'] : 'C';
 		$alignPrice = isset($config['alignPrice']) ? $config['alignPrice'] : 'R';
 
 		// Retrieve JSON data
@@ -136,8 +140,8 @@ function createPDF($config) {
 		// $fill=0, $link='', $stretch=0, $ignore_min_height=false, $calign='T', $valign='M')
 		//
 		$titleWidth = $pdf->getPageWidth() - PDF_LABEL_MARGIN_LEFT - PDF_LABEL_MARGIN_RIGHT;
-		$labelCellWidth = 8;
-		$valueCellWidth = $labelCellWidth * 2;
+		$labelCellWidth = 10;
+		$valueCellWidth = $labelCellWidth * 2.75;
 		$cellHeight = 1;
 
 		$pdf->SetX(PDF_LABEL_MARGIN_LEFT);
@@ -154,9 +158,10 @@ function createPDF($config) {
 		//
 		// Each column contains label/value
 		$pdf->SetFont('helvetica', 'R', PDF_LABEL_FONT_SIZE_DATA);
-		$pdf->setCellPaddings(0, 0.2, 0.4, 0);
+		// Set left padding after :
+		$pdf->setCellPaddings(1, 0, 0, 0);
 		$x_index = $pdf->GetX();
-		$x_index_col2 = $x_index + $labelCellWidth * 3;
+		$x_index_col2 = $x_index + $valueCellWidth + $labelCellWidth;
 		$y_index = $pdf->GetY();
 
 		// Print Rug #. Row 1. Left column
@@ -167,22 +172,14 @@ function createPDF($config) {
 
 		// Print LOPC top. Row 1. Right column
 		$pdf->SetXY($x_index_col2, $y_index);
-		$pdf->Cell($labelCellWidth, $cellHeight, '', 0, 1, 'R', 0, '', 0);
-		$pdf->SetXY($x_index_col2 + $labelCellWidth, $y_index);
-		$pdf->Cell($valueCellWidth, $cellHeight, $lopctop, 0, 1, 'L', 0, '', 0);
+		$pdf->Cell($valueCellWidth - $labelCellWidth, $cellHeight, $lopctop, 0, 1, 'R', 0, '', 0);
 
-		// Print Quality. Row 2. Left column
+		// Print Quality. Row 2. Left column. Skip right column
 		$y_index = $pdf->GetY();
 		$pdf->SetXY($x_index, $y_index);
 		$pdf->Cell($labelCellWidth, $cellHeight, 'Quality:', 0, 1, 'R', 0, '', 0);
 		$pdf->SetXY($x_index + $labelCellWidth, $y_index);
 		$pdf->Cell($valueCellWidth, $cellHeight, $quality, 0, 1, 'L', 0, '', 0);
-
-		// Print Color. Row 2. Right column
-		$pdf->SetXY($x_index_col2, $y_index);
-		$pdf->Cell($labelCellWidth, $cellHeight, 'Color:', 0, 1, 'R', 0, '', 0);
-		$pdf->SetXY($x_index_col2 + $labelCellWidth, $y_index);
-		$pdf->Cell($valueCellWidth, $cellHeight, $color, 0, 1, 'L', 0, '', 0);
 
 		// Print Design. Row 3. Left column. Skip right column
 		$y_index = $pdf->GetY();
@@ -213,24 +210,31 @@ function createPDF($config) {
 		$pdf->Cell($valueCellWidth, $cellHeight, $size, 0, 1, 'L', 0, '', 0);
 
 		// Print LOPC bottom. Row 6. Right column
-		$pdf->SetXY($x_index_col2, $y_index);
-		$pdf->Cell($labelCellWidth, $cellHeight, '', 0, 1, 'R', 0, '', 0);
 		if($showLOPCBottom) {
-			$pdf->SetXY($x_index_col2 + $labelCellWidth, $y_index);
-			$pdf->Cell($valueCellWidth, $cellHeight, $lopcbottom, 0, 1, 'L', 0, '', 0);
+			$pdf->SetXY($x_index_col2, $y_index);
+			$pdf->Cell($valueCellWidth - $labelCellWidth, $cellHeight, $lopcbottom, 0, 1, 'R', 0, '', 0);
 		}
+
+		// Print Color. Row 7. Left column
+		$y_index = $pdf->GetY();
+		$pdf->SetXY($x_index, $y_index);
+		$pdf->Cell($labelCellWidth, $cellHeight, 'Color:', 0, 1, 'R', 0, '', 0);
+		$pdf->SetXY($x_index + $labelCellWidth, $y_index);
+		$pdf->Cell($valueCellWidth, $cellHeight, $color, 0, 1, 'L', 0, '', 0);
 
 		//
 		// SET PRICE
 		//
 		// Print Price tag. Row 7. Right column
-		$y_index = $pdf->GetY();
 		$pdf->SetXY($x_index_col2, $y_index);
 		$pdf->SetFont('helvetica', 'B', PDF_LABEL_FONT_SIZE_MAIN);
 		// Choose align: "L", "C" or "R"
 		// Choose border: 0: none; 1: all; or T: Top / B: Bottom / L: Left / R: Right
-		$pdf->Cell($labelCellWidth * 3, $cellHeight,
+		$pdf->Cell($valueCellWidth - $labelCellWidth, $cellHeight,
 			formatCurrency($pricetag, '$0.00'), 0, 1, $alignPrice, 0, '', 0);
+
+		$y_index = $pdf->GetY();
+		$pdf->SetXY($x_index_col2, $y_index);
 
 		//
 		// SET BARCODE (CODE 39)
@@ -263,10 +267,18 @@ function createPDF($config) {
 				'fontsize' => 8,
 				'stretchtext' => 4
 			);
-			$barcode_x = $x_index_col2;
 			$barcode_y = $pdf->GetY();
 			$barcode_width = $labelCellWidth * 3;
-
+			switch($alignBarcode) {
+                case 'L': // Bottom Left
+					$barcode_x = PDF_LABEL_MARGIN_LEFT;
+					break;
+                case 'R': // Bottom Right
+					$barcode_x = $pdf->getPageWidth() - PDF_LABEL_MARGIN_RIGHT - $barcode_width;
+					break;
+                default: // Bottom Center
+					$barcode_x = ($pdf->getPageWidth() - $barcode_width) / 2;
+              }
 			// Print barcode
 			$pdf->SetFont('helvetica', 'R', 8);
 			$pdf->write1DBarcode($rugnumber, 'C39', $barcode_x, $barcode_y, $barcode_width, 6, 0.4, $style, 'N');

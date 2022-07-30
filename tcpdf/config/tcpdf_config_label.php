@@ -93,7 +93,10 @@
 /**
  * Page format. Dymo LabelWriter 450 label 30334 custom page size: 2-1/8" x 1-1/8"
  */
-define ('PDF_LABEL_PAGE_FORMAT', array(53.97, 28.57));
+// v01: Page size is the same as label size "in theory"
+// define ('PDF_LABEL_PAGE_FORMAT', array(53.97, 28.57));
+// v02: Increase page size * 1.2 to it fits real printed size
+define ('PDF_LABEL_PAGE_FORMAT', array(64, 34));
 
 /**
  * Page orientation (P=portrait, L=landscape).
@@ -168,7 +171,7 @@ define ('PDF_LABEL_FONT_NAME_MAIN', 'helvetica');
 /**
  * Default main font size.
  */
-define ('PDF_LABEL_FONT_SIZE_MAIN', 6);
+define ('PDF_LABEL_FONT_SIZE_MAIN', 7);
 
 /**
  * Default data font name.
@@ -178,7 +181,7 @@ define ('PDF_LABEL_FONT_NAME_DATA', 'helvetica');
 /**
  * Default data font size.
  */
-define ('PDF_LABEL_FONT_SIZE_DATA', 5);
+define ('PDF_LABEL_FONT_SIZE_DATA', 7);
 
 /**
  * Default monospaced font name.

@@ -1,0 +1,12 @@
+{
+  "drfdata" : {
+    "todaydate" : "July 31, 2022",
+    "beneficiary" : "Jane Smith",
+    "requestedby" : "Taylor Swift",
+    "amount" : "50999",
+    "purpose" : "College tuition & singing lessons",
+    "checkpayableto" : "Taylor Swift",
+    "address" : "1600 Amphitheatre Pkwy, Mountain View, CA 94043, US",
+    "signature" : "T.S. signature"
+  }
+}

@@ -271,7 +271,8 @@ function getTable($items, $itemRowEvenColorHEX, $itemRowOddColorHEX, $headerColo
 		'<td width="40"></td>' .
 		// '<td width="80"></td>' .
 		'<td width="160" style="' . $balanceStyle . '"><b>Balance Due</b></td>' .
-		'<td width="80" style="' . $balanceStyle . '"><b>' . formatCurrency($datatotal->balance, '$0.00') . '</b></td>' .
+		'<td width="80" style="' . $balanceStyle . '"><b>' .
+			formatCurrency($datatotal->balance, '$0.00') . '</b></td>' .
 	'</tr>';
 
 	// Close tags

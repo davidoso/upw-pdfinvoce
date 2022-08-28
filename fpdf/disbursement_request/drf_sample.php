@@ -236,5 +236,6 @@
     }
     $pdf->Rect(115, $topOfBottom + 3, 88, 40);
 
-
-    $pdf->Output();
+	// Close and output PDF document
+    // Choose "I" or "D". I: view on browser. D: download directly
+    $pdf->Output('form.pdf', 'I');

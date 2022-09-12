@@ -1,0 +1,19 @@
+{
+  "beneficiary" : "Bruce Wayne",
+  "accountcode" : "12345-67890",
+  "authorizedform" : "VALUE HERE",
+  "ckboxIdxApplication" : 2,
+  "ckboxIdxPayment" : 5,
+  "amount" : "7500",
+  "effectiveDateDay" : "31",
+  "effectiveDateMonth" : "12",
+  "effectiveDateYear" : "22",
+  "payableto" : "Barbara Gordon",
+  "accountnumber" : "9988776655",
+  "mailingday" : "7",
+  "mailingaddress" : "1600 Amphitheatre Pkwy, Mountain View, CA 94043, US",
+  "signature" : "",
+  "monthlyDeposit" : 5000,
+  "nysarcFee" : 250,
+  "auditFee" : 10
+}

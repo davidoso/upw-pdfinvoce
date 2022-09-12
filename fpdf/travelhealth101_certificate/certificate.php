@@ -8,7 +8,7 @@
     // Use FPDI instead of FPDF to import empty pdf template
     // Page size: letter (landscape)
     $pdf = new FPDI('l', 'cm', array(21.6, 27.9));
-    $pagecount = $pdf->setSourceFile('certificate_template.pdf');
+    $pageCount = $pdf->setSourceFile('certificate_template.pdf');
     // Use imported template as new page
     $tpl = $pdf->importPage(1);
     $pdf->AddPage();

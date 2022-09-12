@@ -36,8 +36,6 @@
 
     // Format amount as currency
     $zeroValue = '$0.00';
-    if($amount == $zeroValue)
-        $amount = $zeroValue;
     if(intval($amount) == 0)
         $amount = $zeroValue;
     else
